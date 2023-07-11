@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_icon_size">52dp</dimen>
+
+    <dimen name="nag_play_icon_width">@dimen/common_icon_size</dimen>
+    <dimen name="nag_play_icon_height">@dimen/common_icon_size</dimen>
+    <dimen name="nag_forward_icon_width">@dimen/common_icon_size</dimen>
+    <dimen name="nag_forward_icon_height">@dimen/common_icon_size</dimen>
+    <dimen name="nag_rewind_icon_width">@dimen/common_icon_size</dimen>
+    <dimen name="nag_rewind_icon_height">@dimen/common_icon_size</dimen>
+
+    <dimen name="nag_duration_text_size">5sp</dimen>
+    <dimen name="nag_time_text_size">8sp</dimen>
+    <dimen name="nag_common_text_size">18sp</dimen>
+
+    <dimen name="skip_intro_horizontal_margin">10dp</dimen>
+    <dimen name="skip_intro_vertical_padding">5dp</dimen>
+
+    <dimen name="nag_quality_icon_width">35dp</dimen>
+    <dimen name="nag_quality_icon_height">35dp</dimen>
+</resources>
