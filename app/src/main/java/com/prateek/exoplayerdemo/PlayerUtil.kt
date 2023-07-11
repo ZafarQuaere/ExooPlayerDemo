@@ -77,7 +77,7 @@ object PlayerUtil {
 
 
     fun showSpeedDialog(context: Context, view: View, player: Player?, speed: Float) {
-        val offsetY = 200 // to create the dialog slightly above the view.
+//        val offsetY = 200 // to create the dialog slightly above the view.
 
         val inflater = LayoutInflater.from(context)
         val dialogView = inflater.inflate(R.layout.speed_dialog, null)
@@ -89,19 +89,19 @@ object PlayerUtil {
         val dialog = builder.create()
 
         //to display alert dialog on top of view similar to pop up menu
-        val location = IntArray(2)
+       /* val location = IntArray(2)
         view.getLocationOnScreen(location)
         val x = location[0]
         val y = location[1]
-        val newY = y - offsetY
+//        val newY = y - offsetY
         dialog.window.let {
             val layoutParams = WindowManager.LayoutParams()
             layoutParams.copyFrom(it?.attributes)
             layoutParams.gravity = Gravity.TOP or Gravity.START
             layoutParams.x = x
-            layoutParams.y = newY
+            layoutParams.y = y
             it?.attributes = layoutParams
-        }
+        }*/
 
         btnIncrement.setOnClickListener {
             changeSpeed(player, isIncrement = true)

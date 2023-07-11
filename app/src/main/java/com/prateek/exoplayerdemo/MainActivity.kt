@@ -1,7 +1,5 @@
 package com.prateek.exoplayerdemo
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -24,6 +22,9 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     private var trackSelectionParameters: TrackSelectionParameters? = null
     private var trackDataList = ArrayList<TracksData>()
     private var speed: Float = 1.0f
+    private var selectedItem: TracksData? = null
+    var popupMenu: GenericPopupMenu? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,24 +43,25 @@ class MainActivity : AppCompatActivity(), Player.Listener {
         val btnMenu: View = findViewById<ImageButton>(R.id.exo_quality)
         btnMenu.setOnClickListener {
             trackDataList = PlayerUtil.printQualitySelector(player, trackSelectionParameters!!)
-            showPopupMenu(btnMenu)
+            val selectedTrack = if (selectedItem == null) trackDataList[0] else selectedItem
+            showPopupMenu(btnMenu, selectedTrack!!)
         }
 
         // speed control
-        val btnSpeed: View = findViewById<ImageButton>(androidx.media3.ui.R.id.exo_playback_speed)
+        val btnSpeed: View = findViewById<ImageButton>(R.id.exo_playback_speed)
         btnSpeed.setOnClickListener {
             val speedDialog = PlayerUtil.showSpeedDialog(this,btnSpeed,player,speed)
         }
     }
 
 
-    private fun showPopupMenu(btnMenu: View) {
-
-        val popupMenu = GenericPopupMenu(this, btnMenu, trackDataList, object : GenericPopupMenu.OnItemSelectedListener<TracksData> {
+    private fun showPopupMenu(btnMenu: View, selectedTrack: TracksData) {
+          popupMenu = GenericPopupMenu(this, btnMenu, trackDataList, selectedTrack, object : GenericPopupMenu.OnItemSelectedListener<TracksData> {
             override fun onItemSelected(item: TracksData) {
                Toast.makeText(applicationContext, "Selected: ${item.trackName}", Toast.LENGTH_SHORT).show()
                 for ((index, data) in trackDataList.withIndex()) {
                     if (trackDataList[index].trackName == item.trackName) {
+                        selectedItem = data
                         player?.trackSelectionParameters =
                             player?.trackSelectionParameters
                                 ?.buildUpon()
@@ -71,14 +73,13 @@ class MainActivity : AppCompatActivity(), Player.Listener {
                 }
             }
         })
-        popupMenu.show()
+        popupMenu?.show()
     }
 
     private fun initPlayer() {
-//        val mediaItem = MediaItem.fromUri("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")
 //        val mediaItem = MediaItem.fromUri("https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8")
-//        val mediaItem = MediaItem.fromUri("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")
-        val mediaItem = MediaItem.fromUri("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")
+        val mediaItem = MediaItem.fromUri("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")
+//        val mediaItem = MediaItem.fromUri("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")
         val mediaSource = HlsMediaSource.Factory(DefaultHttpDataSource.Factory()).createMediaSource(mediaItem)
 
         player = ExoPlayer.Builder(this).build()

@@ -69,7 +69,11 @@
 
             <ImageButton
                 android:id="@id/exo_playback_speed"
-                style="@style/ExoStyledControls.Button.Bottom.PlaybackSpeed" />
+                android:layout_width="@dimen/nag_quality_icon_width"
+                android:layout_height="@dimen/nag_quality_icon_height"
+                android:layout_margin="@dimen/skip_intro_vertical_padding"
+                android:background="@drawable/ic_speed"
+                android:layout_gravity="center_vertical" />
 
 
           <!--  <ImageButton
