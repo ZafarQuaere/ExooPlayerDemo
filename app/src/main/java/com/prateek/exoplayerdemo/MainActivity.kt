@@ -52,6 +52,22 @@ class MainActivity : AppCompatActivity(), Player.Listener {
         btnSpeed.setOnClickListener {
             val speedDialog = PlayerUtil.showSpeedDialog(this,btnSpeed,player,speed)
         }
+
+        val btnSettingMenu = findViewById<ImageButton>(R.id.exoSettings)
+        btnSettingMenu.setOnClickListener {
+            val items = listOf("Audio", "Subtitles")
+            val popupwindow_obj = popupDisplay()
+//            popupwindow_obj!!.showAsDropDown(btnSettingMenu, 0, -300)
+//            showCustomMenu(btnSettingMenu, items)
+            val settingMenu = SettingsMenu(this,btnSettingMenu,items,object :
+                SettingsMenu.SettingItemClickListener<String> {
+                override fun onItemSelected(item: String) {
+                    Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
+                }
+
+            })
+            settingMenu.show()
+        }
     }
 
 

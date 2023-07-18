@@ -81,8 +81,13 @@
                 style="@style/ExoStyledControls.Button.Bottom.RepeatToggle" />-->
 
             <ImageButton
-                android:id="@id/exo_subtitle"
-                style="@style/ExoStyledControls.Button.Bottom.CC" />
+                android:id="@+id/exoSettings"
+                android:layout_width="@dimen/nag_quality_icon_width"
+                android:layout_height="@dimen/nag_quality_icon_height"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/skip_intro_vertical_padding"
+                android:background="@drawable/exo_styled_controls_settings"
+                tools:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/exo_quality"
