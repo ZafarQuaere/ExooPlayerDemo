@@ -3,10 +3,8 @@ package com.prateek.exoplayerdemo
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -75,6 +73,48 @@ object PlayerUtil {
         return dataList
     }
 
+
+    fun printAudioTrack(player: Player?): ArrayList<String> {
+        val dataList = ArrayList<String>()
+        player?.let {
+            val tracks = it.currentTracks
+            val groups = tracks.groups
+            //group level information
+            for (tGroup in groups) {
+              if (tGroup.type == C.TRACK_TYPE_AUDIO) {
+                    for (i in 0 until tGroup.length) {
+                        // Individual track information.
+                        val track = tGroup.mediaTrackGroup
+                        val audioTrackName = "${track.getFormat(i).label} ( ${track.getFormat(i).language})"
+                        dataList.add(audioTrackName)
+                        println("Tracks Audio >>> language: ${track.getFormat(i).language} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}")
+                    }
+               }
+            }
+        }
+        return dataList
+    }
+
+    fun printSubtitles(player: Player?): ArrayList<String> {
+        val dataList = ArrayList<String>()
+        player?.let {
+            val tracks = it.currentTracks
+            val groups = tracks.groups
+            //group level information
+            for (tGroup in groups) {
+                if (tGroup.type == C.TRACK_TYPE_TEXT) {
+                    for (i in 0 until tGroup.length) {
+                        // Individual track information.
+                        val track = tGroup.mediaTrackGroup
+                        val textTrackName = "${track.getFormat(i).label} ( ${track.getFormat(i).language})"
+                        dataList.add(textTrackName)
+                        println("Tracks Text >>> language: ${track.getFormat(i).language} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}")
+                    }
+                }
+            }
+        }
+        return dataList
+    }
 
     fun showSpeedDialog(context: Context, view: View, player: Player?, speed: Float) {
 //        val offsetY = 200 // to create the dialog slightly above the view.

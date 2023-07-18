@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity(), Player.Listener {
             val popupwindow_obj = popupDisplay()
 //            popupwindow_obj!!.showAsDropDown(btnSettingMenu, 0, -300)
 //            showCustomMenu(btnSettingMenu, items)
-            val settingMenu = SettingsMenu(this,btnSettingMenu,items,object :
+            val settingMenu = SettingsMenu(this,btnSettingMenu,items,player,object :
                 SettingsMenu.SettingItemClickListener<String> {
                 override fun onItemSelected(item: String) {
-                    Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
                 }
 
             })
@@ -93,8 +93,8 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     }
 
     private fun initPlayer() {
-//        val mediaItem = MediaItem.fromUri("https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8")
-        val mediaItem = MediaItem.fromUri("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")
+        val mediaItem = MediaItem.fromUri("https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8")
+//        val mediaItem = MediaItem.fromUri("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")
 //        val mediaItem = MediaItem.fromUri("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")
         val mediaSource = HlsMediaSource.Factory(DefaultHttpDataSource.Factory()).createMediaSource(mediaItem)
 
