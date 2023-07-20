@@ -5,17 +5,17 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 
-class GenericPopupMenu(
+class VideoTracksMenu(
     private val context: Context,
     private val anchorView: View,
-    private val items: List<TracksData>,
-    private var selectedItem: TracksData,
-    private val onItemSelectedListener: OnItemSelectedListener<TracksData>
+    private val items: List<VideoTracksData>,
+    private var selectedItem: VideoTracksData,
+    private val onItemSelectedListener: OnItemSelectedListener
 ) {
 
     private var selectedItemIndex: Int = -1
-    interface OnItemSelectedListener<TracksData> {
-        fun onItemSelected(item: TracksData)
+    interface OnItemSelectedListener {
+        fun onItemSelected(item: VideoTracksData)
     }
 
     fun show() {

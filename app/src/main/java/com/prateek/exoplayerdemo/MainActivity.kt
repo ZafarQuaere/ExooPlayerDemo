@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.*
 import androidx.media3.common.util.Util
@@ -20,10 +19,10 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     private var playWhenReady = true
     private var isShowingTrackSelectionDialog = false
     private var trackSelectionParameters: TrackSelectionParameters? = null
-    private var trackDataList = ArrayList<TracksData>()
+    private var trackDataList = ArrayList<VideoTracksData>()
     private var speed: Float = 1.0f
-    private var selectedItem: TracksData? = null
-    var popupMenu: GenericPopupMenu? = null
+    private var selectedItem: VideoTracksData? = null
+    var popupMenu: VideoTracksMenu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,40 +40,85 @@ class MainActivity : AppCompatActivity(), Player.Listener {
         }
 
         val btnMenu: View = findViewById<ImageButton>(R.id.exo_quality)
+
         btnMenu.setOnClickListener {
-            trackDataList = PlayerUtil.printQualitySelector(player, trackSelectionParameters!!)
+            trackDataList = PlaybackUtil.printQualitySelector(player, trackSelectionParameters!!)
             val selectedTrack = if (selectedItem == null) trackDataList[0] else selectedItem
-            showPopupMenu(btnMenu, selectedTrack!!)
+            showVideoTracksMenu(btnMenu, selectedTrack!!)
         }
 
         // speed control
         val btnSpeed: View = findViewById<ImageButton>(R.id.exo_playback_speed)
         btnSpeed.setOnClickListener {
-            val speedDialog = PlayerUtil.showSpeedDialog(this,btnSpeed,player,speed)
+            val speedDialog = PlaybackUtil.showSpeedDialog(this,btnSpeed,player,speed)
         }
 
         val btnSettingMenu = findViewById<ImageButton>(R.id.exoSettings)
         btnSettingMenu.setOnClickListener {
-            val items = listOf("Audio", "Subtitles")
-            val popupwindow_obj = popupDisplay()
-//            popupwindow_obj!!.showAsDropDown(btnSettingMenu, 0, -300)
-//            showCustomMenu(btnSettingMenu, items)
-            val settingMenu = SettingsMenu(this,btnSettingMenu,items,player,object :
-                SettingsMenu.SettingItemClickListener<String> {
-                override fun onItemSelected(item: String) {
-//                    Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
-                }
+//            showSettingPopupMenu(btnSettingMenu)
+            showSettingListMenu(btnSettingMenu)
 
-            })
-            settingMenu.show()
         }
     }
 
+    private fun showSettingListMenu(btnSettingMenu: View) {
+        val settingsItem = SettingListMenu.createSettingList()
+        SettingListMenu.showListPopupWindow(
+            this,
+            btnSettingMenu,
+            settingsItem,
+            player as ExoPlayer,
+            object :
+                SettingListMenu.SettingItemClickListener1 {
+                override fun onSettingItemClicked(item: SettingMenuData) {
+                    /* Toast.makeText(context, "clicked $item", Toast.LENGTH_SHORT)
+                         .show()*/
+                }
 
-    private fun showPopupMenu(btnMenu: View, selectedTrack: TracksData) {
-          popupMenu = GenericPopupMenu(this, btnMenu, trackDataList, selectedTrack, object : GenericPopupMenu.OnItemSelectedListener<TracksData> {
-            override fun onItemSelected(item: TracksData) {
-               Toast.makeText(applicationContext, "Selected: ${item.trackName}", Toast.LENGTH_SHORT).show()
+                override fun onAudioItemSelected(item: AudioTracksData) {
+                    player?.trackSelectionParameters =
+                        player?.trackSelectionParameters?.buildUpon()
+                            ?.setPreferredAudioLanguage(item.language)?.build()!!
+                }
+
+                override fun onSubtitleItemSelected(item: SubtitleTracksData) {
+                    player?.trackSelectionParameters =
+                        player?.trackSelectionParameters?.buildUpon()
+                            ?.setPreferredTextLanguage(item.language)?.build()!!
+                }
+            })
+    }
+
+    private fun showSettingPopupMenu(btnSettingMenu: ImageButton) {
+        val items = listOf("Audio", "Subtitles")
+        val settingMenu = SettingsMenu(this,btnSettingMenu,items,player,object :
+            SettingsMenu.SettingItemClickListener<String> {
+            override fun onItemSelected(item: String) {
+//                player?.trackSelectionParameters =
+//                    player?.trackSelectionParameters?.buildUpon()?.setPreferredTextLanguage(item)?.build()!!
+            }
+
+            override fun onAudioItemSelected(item: AudioTracksData) {
+                player?.trackSelectionParameters =
+                    player?.trackSelectionParameters?.buildUpon()
+                        ?.setPreferredAudioLanguage(item.language)?.build()!!
+            }
+
+            override fun onSubtitleItemSelected(item: SubtitleTracksData) {
+                player?.trackSelectionParameters =
+                    player?.trackSelectionParameters?.buildUpon()
+                        ?.setPreferredTextLanguage(item.language)?.build()!!
+            }
+
+        })
+        settingMenu.show()
+    }
+
+
+    private fun showVideoTracksMenu(btnMenu: View, selectedTrack: VideoTracksData) {
+          popupMenu = VideoTracksMenu(this, btnMenu, trackDataList, selectedTrack, object : VideoTracksMenu.OnItemSelectedListener {
+            override fun onItemSelected(item: VideoTracksData) {
+//               Toast.makeText(applicationContext, "Selected: ${item.trackName}", Toast.LENGTH_SHORT).show()
                 for ((index, data) in trackDataList.withIndex()) {
                     if (trackDataList[index].trackName == item.trackName) {
                         selectedItem = data

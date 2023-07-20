@@ -17,9 +17,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import java.text.DecimalFormat
 import java.util.ArrayList
+import java.util.Locale
 
 
-object PlayerUtil {
+object PlaybackUtil {
 
     private var speed: Float = 1.0f
     private const val dismissDelay = 600L
@@ -28,9 +29,9 @@ object PlayerUtil {
     fun printQualitySelector(
         player: Player?,
         trackSelectionParameters: TrackSelectionParameters
-    ): ArrayList<TracksData> {
+    ): ArrayList<VideoTracksData> {
         val trackOverrideList = ArrayList<Pair<String, TrackSelectionParameters.Builder>>()
-        val dataList = ArrayList<TracksData>()
+        val dataList = ArrayList<VideoTracksData>()
 
         player?.let {
             val tracks = it.currentTracks
@@ -63,9 +64,12 @@ object PlayerUtil {
                         builder.addOverride(TrackSelectionOverride(track, i))
                         val trackName = "${track.getFormat(i).width} x ${track.getFormat(i).height}"
                         println("Tracks Name of format trackName >> $trackName ")
-                        val tracksData = TracksData(trackName, track, builder)
-                        trackOverrideList.add(Pair(trackName, builder))
-                        dataList.add(tracksData)
+                        println("Tracks Name of Selection Flags >> ${track.getFormat(i).selectionFlags}")
+//                        if(track.getFormat(i).selectionFlags == C.SELECTION_FLAG_DEFAULT) {
+                            val videoTracksData = VideoTracksData(trackName, track, builder)
+                            trackOverrideList.add(Pair(trackName, builder))
+                            dataList.add(videoTracksData)
+//                        }
                     }
                 }
             }
@@ -74,46 +78,49 @@ object PlayerUtil {
     }
 
 
-    fun printAudioTrack(player: Player?): ArrayList<String> {
-        val dataList = ArrayList<String>()
+    fun printAudioTrack(player: Player?): ArrayList<AudioTracksData> {
+        val set = HashSet<AudioTracksData>()
         player?.let {
             val tracks = it.currentTracks
             val groups = tracks.groups
-            //group level information
             for (tGroup in groups) {
-              if (tGroup.type == C.TRACK_TYPE_AUDIO) {
+                if (tGroup.type == C.TRACK_TYPE_AUDIO) {
                     for (i in 0 until tGroup.length) {
-                        // Individual track information.
                         val track = tGroup.mediaTrackGroup
-                        val audioTrackName = "${track.getFormat(i).label} ( ${track.getFormat(i).language})"
-                        dataList.add(audioTrackName)
-                        println("Tracks Audio >>> language: ${track.getFormat(i).language} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}")
+                        val audioTracksData = AudioTracksData(track.getFormat(i).language!!, track.getFormat(i).label!!, track.getFormat(i).id!!)
+                        set.add(audioTracksData)
+                        println("Tracks Audio >>> language: ${Locale(track.getFormat(i).language.toString()).displayLanguage} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}")
                     }
-               }
+                }
             }
         }
-        return dataList
+        return set.toList().toCollection(ArrayList<AudioTracksData>())
     }
 
-    fun printSubtitles(player: Player?): ArrayList<String> {
-        val dataList = ArrayList<String>()
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    fun printSubtitles(player: Player?): ArrayList<SubtitleTracksData> {
+        val set = HashSet<SubtitleTracksData>()
         player?.let {
             val tracks = it.currentTracks
             val groups = tracks.groups
-            //group level information
             for (tGroup in groups) {
                 if (tGroup.type == C.TRACK_TYPE_TEXT) {
                     for (i in 0 until tGroup.length) {
-                        // Individual track information.
                         val track = tGroup.mediaTrackGroup
-                        val textTrackName = "${track.getFormat(i).label} ( ${track.getFormat(i).language})"
-                        dataList.add(textTrackName)
-                        println("Tracks Text >>> language: ${track.getFormat(i).language} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}")
+                        val subtitleTracksData = SubtitleTracksData(
+                            track.getFormat(i).language!!,
+                            track.getFormat(i).label!!,
+                            track.getFormat(i).id!!
+                        )
+//                        if(track.getFormat(i).selectionFlags == C.SELECTION_FLAG_DEFAULT)
+                        set.add(subtitleTracksData)
+                        println("Tracks Text >>> language: ${track.getFormat(i).language} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}"
+                        )
                     }
                 }
             }
         }
-        return dataList
+        return set.toList().toCollection(ArrayList<SubtitleTracksData>())
     }
 
     fun showSpeedDialog(context: Context, view: View, player: Player?, speed: Float) {

@@ -18,6 +18,8 @@ class SettingsMenu(
 val mPlayer = player
     interface SettingItemClickListener<String> {
         fun onItemSelected(item: String)
+        fun onAudioItemSelected(item: AudioTracksData)
+        fun onSubtitleItemSelected(item: SubtitleTracksData)
     }
 
 
@@ -39,11 +41,11 @@ val mPlayer = player
             onItemSelectedListener.onItemSelected( menuItem.title.toString())
             Toast.makeText(context, "name : $selectedMenuItem item id: ${menuItem.itemId}", Toast.LENGTH_LONG).show()
             if (menuItem.itemId == 0) {
-                val audioTrackList = PlayerUtil.printAudioTrack(mPlayer)
+                val audioTrackList = PlaybackUtil.printAudioTrack(mPlayer)
                 showAudioPopUp(context,anchorView,audioTrackList)
             }
             if (menuItem.itemId == 1) {
-                val textTrackList = PlayerUtil.printSubtitles(mPlayer)
+                val textTrackList = PlaybackUtil.printSubtitles(mPlayer)
                 showSubtitlesPopUp(context,anchorView,textTrackList)
             }
             true
@@ -55,18 +57,18 @@ val mPlayer = player
     private fun showAudioPopUp(
         context: Context,
         anchorView: View,
-        audioTrackList: ArrayList<String>
+        audioTrackList: ArrayList<AudioTracksData>
     ) {
         val popupMenu = PopupMenu(context, anchorView)
 
         for ((index, item) in audioTrackList.withIndex()) {
-            popupMenu.menu.add(0, index, index, "$item")
+            popupMenu.menu.add(0, index, index, "${item.label}")
         }
 
         popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
             val selectedMenuItemIndex = menuItem.itemId
             val selectedMenuItem = audioTrackList[selectedMenuItemIndex]
-            onItemSelectedListener.onItemSelected(selectedMenuItem)
+            onItemSelectedListener.onAudioItemSelected(selectedMenuItem)
             Toast.makeText(context, "selectedMenuItem $selectedMenuItem item id: ${menuItem.itemId}", Toast.LENGTH_LONG).show()
             true
         }
@@ -76,18 +78,18 @@ val mPlayer = player
     private fun showSubtitlesPopUp(
         context: Context,
         anchorView: View,
-        textTrackList: ArrayList<String>
+        textTrackList: ArrayList<SubtitleTracksData>
     ) {
         val popupMenu = PopupMenu(context, anchorView)
 
         for ((index, item) in textTrackList.withIndex()) {
-            popupMenu.menu.add(0, index, index, "$item")
+            popupMenu.menu.add(0, index, index, "${item.label}")
         }
 
         popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
             val selectedMenuItemIndex = menuItem.itemId
             val selectedMenuItem = textTrackList[selectedMenuItemIndex]
-            onItemSelectedListener.onItemSelected(selectedMenuItem)
+            onItemSelectedListener.onSubtitleItemSelected(selectedMenuItem)
             Toast.makeText(context, "selectedMenuItem $selectedMenuItem item id: ${menuItem.itemId}", Toast.LENGTH_LONG).show()
             true
         }
