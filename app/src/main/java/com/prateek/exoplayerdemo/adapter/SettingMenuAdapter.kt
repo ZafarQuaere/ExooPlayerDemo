@@ -7,7 +7,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.prateek.exoplayerdemo.R
-import com.prateek.exoplayerdemo.SettingMenuData
+import com.prateek.exoplayerdemo.data.SettingMenuData
 
 
 class SettingMenuAdapter(private val items: List<SettingMenuData>) :

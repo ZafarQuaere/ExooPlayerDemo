@@ -14,6 +14,9 @@ import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.TrackSelectionParameters
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.prateek.exoplayerdemo.data.AudioTracksData
+import com.prateek.exoplayerdemo.data.SubtitleTracksData
+import com.prateek.exoplayerdemo.data.VideoTracksData
 
 import java.text.DecimalFormat
 import java.util.ArrayList

@@ -10,6 +10,10 @@ import androidx.media3.common.util.Util
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import com.prateek.exoplayerdemo.data.AudioTracksData
+import com.prateek.exoplayerdemo.data.SettingMenuData
+import com.prateek.exoplayerdemo.data.SubtitleTracksData
+import com.prateek.exoplayerdemo.data.VideoTracksData
 import kotlinx.android.synthetic.main.activity_main.*
 
 

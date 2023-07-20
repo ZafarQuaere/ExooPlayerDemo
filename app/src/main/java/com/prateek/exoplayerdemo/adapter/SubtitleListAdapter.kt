@@ -7,7 +7,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.prateek.exoplayerdemo.R
-import com.prateek.exoplayerdemo.SubtitleTracksData
+import com.prateek.exoplayerdemo.data.SubtitleTracksData
 
 import java.util.ArrayList
 

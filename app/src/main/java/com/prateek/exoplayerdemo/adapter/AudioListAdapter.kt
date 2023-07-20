@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.prateek.exoplayerdemo.AudioTracksData
+import com.prateek.exoplayerdemo.data.AudioTracksData
 import com.prateek.exoplayerdemo.R
 import java.util.ArrayList
 

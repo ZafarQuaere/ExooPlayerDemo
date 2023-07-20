@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.media3.exoplayer.ExoPlayer
+import com.prateek.exoplayerdemo.data.AudioTracksData
+import com.prateek.exoplayerdemo.data.SubtitleTracksData
 import java.util.ArrayList
 
 class SettingsMenu(

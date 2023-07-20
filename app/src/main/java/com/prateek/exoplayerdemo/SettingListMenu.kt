@@ -8,6 +8,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.prateek.exoplayerdemo.adapter.AudioListAdapter
 import com.prateek.exoplayerdemo.adapter.SettingMenuAdapter
 import com.prateek.exoplayerdemo.adapter.SubtitleListAdapter
+import com.prateek.exoplayerdemo.data.AudioTracksData
+import com.prateek.exoplayerdemo.data.SettingMenuData
+import com.prateek.exoplayerdemo.data.SubtitleTracksData
 import java.util.ArrayList
 
 object SettingListMenu {

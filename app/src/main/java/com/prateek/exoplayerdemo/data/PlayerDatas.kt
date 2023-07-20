@@ -1,4 +1,4 @@
-package com.prateek.exoplayerdemo
+package com.prateek.exoplayerdemo.data
 
 import androidx.media3.common.TrackGroup
 import androidx.media3.common.TrackSelectionParameters
@@ -25,3 +25,5 @@ data class SettingMenuData(
     val title : String,
     val icon: Int
 )
+
+data class ListPopupItem(val title: String, val imgRes: Int)
