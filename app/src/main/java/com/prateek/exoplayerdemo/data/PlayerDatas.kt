@@ -27,3 +27,5 @@ data class SettingMenuData(
 )
 
 data class ListPopupItem(val title: String, val imgRes: Int)
+
+data class SpeedData(val speed: Float, var isSelected : Boolean = false)

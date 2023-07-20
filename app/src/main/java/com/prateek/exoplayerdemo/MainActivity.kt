@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.*
 import androidx.media3.common.util.Util
@@ -12,6 +13,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import com.prateek.exoplayerdemo.data.AudioTracksData
 import com.prateek.exoplayerdemo.data.SettingMenuData
+import com.prateek.exoplayerdemo.data.SpeedData
 import com.prateek.exoplayerdemo.data.SubtitleTracksData
 import com.prateek.exoplayerdemo.data.VideoTracksData
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     private var speed: Float = 1.0f
     private var selectedItem: VideoTracksData? = null
     var popupMenu: VideoTracksMenu? = null
+    private var selectedSpeedData = SpeedData(1.0f,true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +57,8 @@ class MainActivity : AppCompatActivity(), Player.Listener {
         // speed control
         val btnSpeed: View = findViewById<ImageButton>(R.id.exo_playback_speed)
         btnSpeed.setOnClickListener {
-            val speedDialog = PlaybackUtil.showSpeedDialog(this,btnSpeed,player,speed)
+//            val speedDialog = PlaybackUtil.showSpeedDialog(this,btnSpeed,player,speed)
+            showSpeedMenu(btnSpeed)
         }
 
         val btnSettingMenu = findViewById<ImageButton>(R.id.exoSettings)
@@ -63,6 +67,25 @@ class MainActivity : AppCompatActivity(), Player.Listener {
             showSettingListMenu(btnSettingMenu)
 
         }
+    }
+
+    private fun showSpeedMenu(btnSpeed: View) {
+        val speedList = SpeedMenu.createSpeedListData()
+        val speedMenu = SpeedMenu.showSpeedPopMenu(
+            this,
+            btnSpeed,
+            speedList,
+            selectedSpeedData,
+            object : SpeedMenu.SpeedItemClickListener {
+                override fun onSpeedItemClick(item: SpeedData) {
+                    selectedSpeedData = item
+                    Toast.makeText(this@MainActivity, "speed is ${item.speed}", Toast.LENGTH_SHORT)
+                        .show()
+                    val param = PlaybackParameters(item.speed)
+                    player?.playbackParameters = param
+                    player?.setPlaybackSpeed(item.speed)
+                }
+            })
     }
 
     private fun showSettingListMenu(btnSettingMenu: View) {
@@ -74,10 +97,7 @@ class MainActivity : AppCompatActivity(), Player.Listener {
             player as ExoPlayer,
             object :
                 SettingListMenu.SettingItemClickListener1 {
-                override fun onSettingItemClicked(item: SettingMenuData) {
-                    /* Toast.makeText(context, "clicked $item", Toast.LENGTH_SHORT)
-                         .show()*/
-                }
+                override fun onSettingItemClicked(item: SettingMenuData) {}
 
                 override fun onAudioItemSelected(item: AudioTracksData) {
                     player?.trackSelectionParameters =
