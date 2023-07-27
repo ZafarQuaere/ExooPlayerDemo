@@ -46,12 +46,13 @@ class MainActivity : AppCompatActivity(), Player.Listener {
             }
         }
 
-        val btnMenu: View = findViewById<ImageButton>(R.id.exo_quality)
+        val btnVideoTrack: View = findViewById<ImageButton>(R.id.exo_quality)
 
-        btnMenu.setOnClickListener {
+        btnVideoTrack.setOnClickListener {
             trackDataList = PlaybackUtil.printQualitySelector(player, trackSelectionParameters!!)
             val selectedTrack = if (selectedItem == null) trackDataList[0] else selectedItem
-            showVideoTracksMenu(btnMenu, selectedTrack!!)
+            showVideoTracksMenu(btnVideoTrack, selectedTrack!!)
+//            showVideoListMenu(btnVideoTrack,trackDataList)
         }
 
         // speed control
@@ -69,9 +70,23 @@ class MainActivity : AppCompatActivity(), Player.Listener {
         }
     }
 
+    private fun showVideoListMenu(view: View, videoTracks: ArrayList<VideoTracksData>) {
+        VideoTrackMenu.showVideoPopupWindow(this, view, videoTracks,  object : VideoTrackMenu.VideoTrackListener {
+            override fun onVideoItemSelected(item: VideoTracksData) {
+                player?.trackSelectionParameters =
+                    player?.trackSelectionParameters
+                        ?.buildUpon()
+                        ?.setOverrideForType(
+                            TrackSelectionOverride(item.track, /* trackIndex= */ item.index)
+                        )
+                        ?.build()!!
+            }
+        })
+    }
+
     private fun showSpeedMenu(btnSpeed: View) {
         val speedList = SpeedMenu.createSpeedListData()
-        val speedMenu = SpeedMenu.showSpeedPopMenu(
+        SpeedMenu.showSpeedPopMenu(
             this,
             btnSpeed,
             speedList,

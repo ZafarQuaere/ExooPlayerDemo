@@ -34,50 +34,42 @@ object PlaybackUtil {
         trackSelectionParameters: TrackSelectionParameters
     ): ArrayList<VideoTracksData> {
         val trackOverrideList = ArrayList<Pair<String, TrackSelectionParameters.Builder>>()
-        val dataList = ArrayList<VideoTracksData>()
+        val dataSet = HashSet<VideoTracksData>()
 
         player?.let {
             val tracks = it.currentTracks
             val groups = tracks.groups
-            val trackParams = it.trackSelectionParameters
-            println("Track params: $trackParams")
 
             //group level information
             for (tGroup in groups) {
 
-                //Group level information
-                val trackType = tGroup.type
-                val trackInGroupIsSelected = tGroup.isSelected
-                val trackInGroupIsSupported = tGroup.isSupported
-                println("Tracks Group level: trackType $trackType   trackInGroupIsSelected $trackInGroupIsSelected  trackInGroupIsSupported $trackInGroupIsSupported ")
-
-                val builder: TrackSelectionParameters.Builder =
-                    trackSelectionParameters!!.buildUpon()
+                val builder: TrackSelectionParameters.Builder = trackSelectionParameters.buildUpon()
 
                 if (tGroup.type == C.TRACK_TYPE_VIDEO) {
                     for (i in 0 until tGroup.length) {
                         // Individual track information.
                         val track = tGroup.mediaTrackGroup
-                        val isSupported = tGroup.isTrackSupported(i)
-                        val isSelected = tGroup.isTrackSelected(i)
-                        val trackFormat = tGroup.getTrackFormat(i)
-                        println("Tracks Individual level: isSupported>> $isSupported   isSelected>> $isSelected  trackFormat>> $trackFormat ")
 
                         builder.clearOverridesOfType(C.TRACK_TYPE_VIDEO)
                         builder.addOverride(TrackSelectionOverride(track, i))
                         val trackName = "${track.getFormat(i).width} x ${track.getFormat(i).height}"
                         println("Tracks Name of format trackName >> $trackName ")
-                        println("Tracks Name of Selection Flags >> ${track.getFormat(i).selectionFlags}")
-//                        if(track.getFormat(i).selectionFlags == C.SELECTION_FLAG_DEFAULT) {
-                            val videoTracksData = VideoTracksData(trackName, track, builder)
+
+                            val videoTracksData = VideoTracksData(
+                                trackName,
+                                track,
+                                builder,
+                                tGroup.isTrackSelected(i),
+                                i
+                            )
                             trackOverrideList.add(Pair(trackName, builder))
-                            dataList.add(videoTracksData)
+                            dataSet.add(videoTracksData)
 //                        }
                     }
                 }
             }
         }
-        return dataList
+        return  dataSet.toList().toCollection(ArrayList<VideoTracksData>())
     }
 
 
@@ -90,7 +82,12 @@ object PlaybackUtil {
                 if (tGroup.type == C.TRACK_TYPE_AUDIO) {
                     for (i in 0 until tGroup.length) {
                         val track = tGroup.mediaTrackGroup
-                        val audioTracksData = AudioTracksData(track.getFormat(i).language!!, track.getFormat(i).label!!, track.getFormat(i).id!!)
+                        val audioTracksData = AudioTracksData(
+                            track.getFormat(i).language!!,
+                            track.getFormat(i).label!!,
+                            track.getFormat(i).id!!,
+                            tGroup.isTrackSelected(i)
+                        )
                         set.add(audioTracksData)
                         println("Tracks Audio >>> language: ${Locale(track.getFormat(i).language.toString()).displayLanguage} id: ${track.getFormat(i).id} label: ${track.getFormat(i).label} ${track.getFormat(i)}")
                     }
@@ -113,7 +110,8 @@ object PlaybackUtil {
                         val subtitleTracksData = SubtitleTracksData(
                             track.getFormat(i).language!!,
                             track.getFormat(i).label!!,
-                            track.getFormat(i).id!!
+                            track.getFormat(i).id!!,
+                            tGroup.isTrackSelected(i)
                         )
 //                        if(track.getFormat(i).selectionFlags == C.SELECTION_FLAG_DEFAULT)
                         set.add(subtitleTracksData)

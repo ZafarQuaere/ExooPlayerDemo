@@ -37,6 +37,7 @@ object SpeedMenu {
            adapter.updateItemSelection(position, item.isSelected)
             listener.onSpeedItemClick(speedList[position])
         }
+        popupWindow.isModal = true
         popupWindow.show()
     }
 

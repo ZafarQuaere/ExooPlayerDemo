@@ -36,8 +36,8 @@ class AudioListAdapter(private val items: ArrayList<AudioTracksData>) :
         } else {
             holder = convertView.tag as ViewHolder
         }
-        holder.tvTitle.text = "${getItem(position).label} (${getItem(position).language})"
-        holder.ivImage.visibility = View.GONE
+        holder.tvTitle.text = getItem(position).label
+        holder.ivImage.visibility = if (getItem(position).isSelected) View.VISIBLE else View.GONE
         return convertView!!
     }
 
@@ -46,7 +46,7 @@ class AudioListAdapter(private val items: ArrayList<AudioTracksData>) :
         var ivImage: ImageView
         init {
             tvTitle = view.findViewById<TextView>(R.id.text)
-            ivImage = view.findViewById<ImageView>(R.id.image)
+            ivImage = view.findViewById<ImageView>(R.id.imgBtnCheck)
         }
     }
 }

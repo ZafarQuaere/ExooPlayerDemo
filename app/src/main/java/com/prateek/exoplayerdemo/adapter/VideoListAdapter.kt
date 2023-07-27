@@ -6,19 +6,18 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.prateek.exoplayerdemo.data.VideoTracksData
 import com.prateek.exoplayerdemo.R
-import com.prateek.exoplayerdemo.data.SubtitleTracksData
-
 import java.util.ArrayList
 
 
-class SubtitleListAdapter(private val items: ArrayList<SubtitleTracksData>) :
+class VideoListAdapter(private val items: ArrayList<VideoTracksData>) :
     BaseAdapter() {
     override fun getCount(): Int {
         return items.size
     }
 
-    override fun getItem(i: Int): SubtitleTracksData {
+    override fun getItem(i: Int): VideoTracksData {
         return items[i]
     }
 
@@ -37,7 +36,7 @@ class SubtitleListAdapter(private val items: ArrayList<SubtitleTracksData>) :
         } else {
             holder = convertView.tag as ViewHolder
         }
-        holder.tvTitle.text = getItem(position).label
+        holder.tvTitle.text = getItem(position).trackName
         holder.ivImage.visibility = if (getItem(position).isSelected) View.VISIBLE else View.GONE
         return convertView!!
     }

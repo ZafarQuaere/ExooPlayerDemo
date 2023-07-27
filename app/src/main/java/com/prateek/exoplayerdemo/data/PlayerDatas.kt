@@ -6,19 +6,23 @@ import androidx.media3.common.TrackSelectionParameters
 data class VideoTracksData(
     val trackName: String,
     val track: TrackGroup,
-    val builder: TrackSelectionParameters.Builder
+    val builder: TrackSelectionParameters.Builder,
+    val isSelected: Boolean,
+    val index: Int
 )
 
 data class AudioTracksData(
     val language: String,
     val label: String,
-    val id: String
+    val id: String,
+    val isSelected: Boolean
 )
 
 data class SubtitleTracksData(
     val language: String,
     val label: String,
-    val id: String
+    val id: String,
+    val isSelected: Boolean
 )
 
 data class SettingMenuData(

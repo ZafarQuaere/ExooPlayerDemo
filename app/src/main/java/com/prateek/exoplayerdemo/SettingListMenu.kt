@@ -43,6 +43,7 @@ object SettingListMenu {
 //            Toast.makeText(context, "clicked at $position item : ${items[position]}", Toast.LENGTH_SHORT)
 //                .show()
         }
+        listPopupWindow.isModal = true
         listPopupWindow.show()
     }
 
@@ -62,6 +63,7 @@ object SettingListMenu {
             popup.dismiss()
             listener.onAudioItemSelected(audioTrackList[position])
         }
+        popup.isModal = true
         popup.show()
     }
 
@@ -80,6 +82,7 @@ object SettingListMenu {
             popup.dismiss()
             listener.onSubtitleItemSelected(subtitleTracksData[position])
         }
+        popup.isModal = true
         popup.show()
     }
 

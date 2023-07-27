@@ -21,4 +21,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         tools:text="Title" />
+
+    <ImageButton
+        android:visibility="gone"
+        android:id="@+id/imgBtnCheck"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_check"
+        tools:ignore="ContentDescription"/>
 </LinearLayout>
