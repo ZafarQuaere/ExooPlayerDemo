@@ -32,8 +32,7 @@ object PlaybackUtil {
     fun printQualitySelector(
         player: Player?,
         trackSelectionParameters: TrackSelectionParameters
-    ): ArrayList<VideoTracksData> {
-        val trackOverrideList = ArrayList<Pair<String, TrackSelectionParameters.Builder>>()
+    ): MutableList<VideoTracksData> {
         val dataSet = HashSet<VideoTracksData>()
 
         player?.let {
@@ -62,14 +61,21 @@ object PlaybackUtil {
                                 tGroup.isTrackSelected(i),
                                 i
                             )
-                            trackOverrideList.add(Pair(trackName, builder))
                             dataSet.add(videoTracksData)
 //                        }
                     }
                 }
             }
         }
-        return  dataSet.toList().toCollection(ArrayList<VideoTracksData>())
+        val tempList = dataSet.toMutableList()
+        tempList.sortByDescending { it.trackName.split(" x ").first().toInt() }
+//        return  dataSet.toList()
+        player?.currentTracks?.groups?.get(0)?.let {
+            tempList.add(0,
+                VideoTracksData("Auto", it.mediaTrackGroup, trackSelectionParameters.buildUpon(), true, 0)
+            )
+        }
+        return tempList.toMutableList()
     }
 
 

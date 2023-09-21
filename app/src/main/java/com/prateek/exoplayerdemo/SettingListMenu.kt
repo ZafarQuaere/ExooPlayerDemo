@@ -102,8 +102,8 @@ object SettingListMenu {
 
     fun createSettingList(): List<SettingMenuData> {
         val listPopupItems: MutableList<SettingMenuData> = ArrayList<SettingMenuData>()
-        listPopupItems.add(SettingMenuData("Audio", R.drawable.minus_icon))
-        listPopupItems.add(SettingMenuData("Subtitles", R.drawable.plus_icon))
+        listPopupItems.add(SettingMenuData("Audio", R.drawable.ic_audio))
+        listPopupItems.add(SettingMenuData("Subtitles", R.drawable.ic_subtitles))
         return listPopupItems
     }
 }

@@ -64,7 +64,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
+            android:paddingEnd="20dp"
             android:layoutDirection="ltr">
+
+            <ImageButton
+                android:id="@+id/exoQuality1"
+                android:layout_width="@dimen/nag_quality_icon_width"
+                android:layout_height="@dimen/nag_quality_icon_height"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/skip_intro_vertical_padding"
+                android:background="@drawable/ic_hd"
+                tools:visibility="visible" />
+
+
+            <ImageButton
+                android:id="@+id/imgBtnMuteUnmute"
+                android:layout_width="@dimen/nag_quality_icon_width"
+                android:layout_height="@dimen/nag_quality_icon_height"
+                android:layout_marginEnd="@dimen/skip_intro_horizontal_margin"
+                android:layout_marginVertical="@dimen/skip_intro_vertical_padding"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_unmute" />
 
 
             <ImageButton
@@ -80,14 +100,6 @@
                 android:id="@id/exo_repeat_toggle"
                 style="@style/ExoStyledControls.Button.Bottom.RepeatToggle" />-->
 
-            <ImageButton
-                android:id="@+id/exoSettings"
-                android:layout_width="@dimen/nag_quality_icon_width"
-                android:layout_height="@dimen/nag_quality_icon_height"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/skip_intro_vertical_padding"
-                android:background="@drawable/exo_styled_controls_settings"
-                tools:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/exo_quality"
@@ -99,7 +111,17 @@
                 tools:visibility="visible" />
 
             <ImageButton
+                android:id="@+id/exoSettings"
+                android:layout_width="@dimen/nag_quality_icon_width"
+                android:layout_height="@dimen/nag_quality_icon_height"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/skip_intro_vertical_padding"
+                android:background="@drawable/exo_styled_controls_settings"
+                tools:visibility="visible" />
+
+            <ImageButton
                 android:id="@id/exo_settings"
+                android:visibility="gone"
                 style="@style/ExoStyledControls.Button.Bottom.Settings" />
 <!--
             <ImageButton

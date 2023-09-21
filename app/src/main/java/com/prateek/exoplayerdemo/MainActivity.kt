@@ -1,5 +1,6 @@
 package com.prateek.exoplayerdemo
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -11,6 +12,7 @@ import androidx.media3.common.util.Util
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import com.prateek.exoplayerdemo.analytics.PlayerAnalyticProvider
 import com.prateek.exoplayerdemo.data.AudioTracksData
 import com.prateek.exoplayerdemo.data.SettingMenuData
 import com.prateek.exoplayerdemo.data.SpeedData
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     private var playWhenReady = true
     private var isShowingTrackSelectionDialog = false
     private var trackSelectionParameters: TrackSelectionParameters? = null
-    private var trackDataList = ArrayList<VideoTracksData>()
+    private var trackDataList:MutableList<VideoTracksData> = mutableListOf()
     private var speed: Float = 1.0f
     private var selectedItem: VideoTracksData? = null
     var popupMenu: VideoTracksMenu? = null
@@ -50,7 +52,9 @@ class MainActivity : AppCompatActivity(), Player.Listener {
 
         btnVideoTrack.setOnClickListener {
             trackDataList = PlaybackUtil.printQualitySelector(player, trackSelectionParameters!!)
+//            val selectedTrack1 = VideoTracksData("Auto", TrackGroup(), trackSelectionParameters!!.buildUpon()!!,true,0)
             val selectedTrack = if (selectedItem == null) trackDataList[0] else selectedItem
+//            trackDataList.add(0,selectedTrack1)
             showVideoTracksMenu(btnVideoTrack, selectedTrack!!)
 //            showVideoListMenu(btnVideoTrack,trackDataList)
         }
@@ -62,11 +66,37 @@ class MainActivity : AppCompatActivity(), Player.Listener {
             showSpeedMenu(btnSpeed)
         }
 
-        val btnSettingMenu = findViewById<ImageButton>(R.id.exoSettings)
-        btnSettingMenu.setOnClickListener {
-//            showSettingPopupMenu(btnSettingMenu)
-            showSettingListMenu(btnSettingMenu)
+        findViewById<ImageButton>(R.id.exoSettings).also {
+            it.setOnClickListener {
+                showSettingListMenu(it)
+            }
+        }
 
+        findViewById<ImageButton>(R.id.imgBtnMuteUnmute).also { it ->
+            it.setOnClickListener {
+                muteUnmuteFeature(it as ImageButton)
+            }
+        }
+    }
+
+    private fun muteUnmuteFeature(muteBtn: ImageButton) {
+        player?.volume = if (player?.volume == 0f) 1f else 0f
+        if (player?.volume == 0f) {
+            muteBtn.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    foreground = getDrawable(R.drawable.ic_mutes)
+                } else {
+                    background = getDrawable(R.drawable.ic_mutes)
+                }
+            }
+        } else {
+            muteBtn.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    foreground = getDrawable(R.drawable.ic_unmute)
+                } else {
+                    background = getDrawable(R.drawable.ic_unmute)
+                }
+            }
         }
     }
 
@@ -176,12 +206,13 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     }
 
     private fun initPlayer() {
-        val mediaItem = MediaItem.fromUri("https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8")
+//        val mediaItem = MediaItem.fromUri("https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8")
 //        val mediaItem = MediaItem.fromUri("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")
-//        val mediaItem = MediaItem.fromUri("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")
+        val mediaItem = MediaItem.fromUri("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")
         val mediaSource = HlsMediaSource.Factory(DefaultHttpDataSource.Factory()).createMediaSource(mediaItem)
 
         player = ExoPlayer.Builder(this).build()
+        player?.addAnalyticsListener(PlayerAnalyticProvider(player))
         player?.playWhenReady = true
         player_exo.player = player
 
@@ -193,7 +224,7 @@ class MainActivity : AppCompatActivity(), Player.Listener {
         player?.seekTo(playbackPosition)
         player?.playWhenReady = playWhenReady
         player?.prepare()
-
+//        player?.addAnalyticsListener(TestFairyExoPlayerAnalyticsListener(player))
     }
 
     private fun releasePlayer() {
@@ -237,5 +268,9 @@ class MainActivity : AppCompatActivity(), Player.Listener {
     override fun onDestroy() {
         super.onDestroy()
         releasePlayer()
+    }
+
+    override fun onEvents(player: Player, events: Player.Events) {
+        super.onEvents(player, events)
     }
 }
